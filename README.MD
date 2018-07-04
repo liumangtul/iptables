@@ -161,3 +161,14 @@ sudo iptables -P FORWARD DROP
 备注：把-P policy（默认规则） 里的FORWARD（转发） 执行的规则改成 DROP（丢弃）  
 
 ---
+
+#### 禁止指定来源ip的访问 ####
+在防火墙应用里指定规则应用的Chain（规则分组），描述数据包应用的样子，执行的动作target
+```
+    sudo iptables -A INPUT -s 192.168.1.1 -j DROP
+    -A append 追加
+    INPOUT 进入到服务器的数据 
+    -s source 数据包的来源
+
+    追加(append) 丢弃(DROP) 192.168.1.1 进入到服务器(INPUT)
+```
