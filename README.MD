@@ -125,6 +125,39 @@ tcp        0      0 0.0.0.0:80              0.0.0.0:*               LISTEN      
                         `                   more... ...
 ```
 
+----
+只查找当前使用tcp协议传输的连接
+sudo netstat -ntp
+```
+proto 协议 | Recv-Q | Send-Q | Local Address 本机地址 | Foreign Address 连接服务的主机 | state 状态| PID/Program name
+state  ： ESTABLISHED 已经创建
 
+tcp | 0 | 0 | x.x.x.x:xxx | x.x.x.x.:xx | ESTABLISHED | PID、系统名称
+```
 
+#### 基础命令 ####
+查看现有的防火墙
+```
+sudo iptables -L
+sudo iptables --list
+```
+备注：policy 默认的规则|政策 ACCEPT 通过
+---
+查找现有的规则是用什么样的iptables生成的
+```
+sudo iptables -S
+sudo iptables --list-rules
 
+-P INPUT ACCEPT
+-P FORWARD ACCEPT
+-P OUTPUT ACCEPT
+
+```
+
+修改默认的规则
+```
+sudo iptables -P FORWARD DROP
+```
+备注：把-P policy（默认规则） 里的FORWARD（转发） 执行的规则改成 DROP（丢弃）  
+
+---
