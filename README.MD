@@ -6,7 +6,8 @@
 作用：管控要进来的，要出去的，或要转发的数据包
 
 
-用途：规则rules
+用途：
+    规则rules
 
 
     可以设置特性，去描述数据包
@@ -26,12 +27,104 @@
 
     target ：accept接受，drop丢弃，reject拒绝
 
-## Chain 规则的分组
+## Chain 规则的分组 ##
     1. INPUT   接收到的数据包规则
     2. OUTPUT  发出的数据包规则
     3. FORWARD 转发的数据包规则
 
-### rules 规则
+## rules 规则 ##
     按顺序逐条检查，如果符合某一条rule的描述，就会执行对应rule的target，后面的rules就不会执行了
 
     设计时，通用的规则放前面，越具体越放后面
+
+## 传输协议 protocol ##
+    
+    定义：传递动作用的方法（tcp协议等）
+#### 起步
+    port  端口
+    ssh:22
+    website:80
+    nginx管理工具
+    sudo yum install epel-release
+    sudo yum install ngnix -y
+
+
+#### 启动nginx
+    sudo systemctl start nginx
+                    status,stop
+
+#### nmap
+
+    作用：扫描服务器开放的端口
+    sudo yum install nmap -y
+
+    nmap -sT  192.168.33.160
+       s： 扫描 T：tcp
+
+#### example1 ####
+     
+    [vagrant@localhost /]$ nmap -sT 192.168.33.10
+        Starting Nmap 6.40 ( http://nmap.org ) at 2018-07-04 15:18 UTC
+        Nmap scan report for bogon (192.168.33.10)
+        Host is up (0.00072s latency).
+        Not shown: 997 closed ports
+        PORT    STATE SERVICE
+        22/tcp  open  ssh
+        80/tcp  open  http
+        111/tcp open  rpcbind
+        Nmap done: 1 IP address (1 host up) scanned in 0.10 seconds
+    
+    
+
+---
+  #### example2 ####  
+   
+    [vagrant@localhost /]$ nmap -sT localhost
+        Starting Nmap 6.40 ( http://nmap.org ) at 2018-07-04 15:26 UTC
+        Nmap scan report for localhost (127.0.0.1)
+        Host is up (0.00045s latency).
+        Other addresses for localhost (not scanned): 127.0.0.1
+        Not shown: 996 closed ports
+        PORT    STATE SERVICE
+        22/tcp  open  ssh
+        25/tcp  open  smtp
+        80/tcp  open  http
+        111/tcp open  rpcbind
+        Nmap done: 1 IP address (1 host up) scanned in 0.08 seconds
+    
+
+### 查看端口上的连接 ###
+cat /etc/services
+service name 服务名称
+
+port/protocol 端口号/传输协议
+
+aliases 别名
+
+comment 描述
+
+sudo cat /etc/services | grep 80 筛选关键词
+----
+运行netstat 命令需要先安装 net-tools
+
+sudo yum install net-tools
+----
+
+查找哪个命令打开的某个端口
+sudo netstat -anp | grep 80
+    
+    a all
+    
+    n 使用数字表示的方式
+
+    p 显示进程的id或者名字
+
+```
+[vagrant@localhost /]$ sudo netstat -anp | grep 80
+tcp        0      0 0.0.0.0:80              0.0.0.0:*               LISTEN      2906/nginx: master
+                        `                   more... ...
+```
+
+
+
+
