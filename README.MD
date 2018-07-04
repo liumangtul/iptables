@@ -138,7 +138,7 @@ tcp | 0 | 0 | x.x.x.x:xxx | x.x.x.x.:xx | ESTABLISHED | PID、系统名称
 #### 基础命令 ####
 查看现有的防火墙
 ```
-sudo iptables -L
+sudo iptables -L --line-numbers
 sudo iptables --list
 ```
 备注：policy 默认的规则|政策 ACCEPT 通过
@@ -171,4 +171,61 @@ sudo iptables -P FORWARD DROP
     -s source 数据包的来源
 
     追加(append) 丢弃(DROP) 192.168.1.1 进入到服务器(INPUT)
+
+    -A INPUT 规则放在哪
+
+    -s 1.1.1.1 数据包来源
+    备注：192.168.1.0/24 从0-24区间的ip -p tcp 指定传输的协议 --dport 目标端口 80
+
+    -j DROP 执行的target动作
+
+    --dport 目标端口指在哪个端口传输协议
 ```
+
+#### example ####
+```
+    sudo iptables -A INPUT -s 192.168.1.1/24 -p tcp --dport 80 -j DROP
+```
+
+---
+### 管理规则 ###
+
+查看
+
+sudo iptables -L --line-numbers
+
+sudo iptables --line
+
+sudo iptables -L INPUT -v 数据量
+
+sudo iptables -Z 清除数据量
+
+查看rules
+
+sudo iptables -S
+
+sudo iptables --list-rules
+
+---
+
+追加，插入rules
+
+按顺序遇到符合的规则就会执行对应的动作，后面就不匹配该规则了
+
+顺序很重要
+
+-A 追加的最后
+
+-I 追加的指定的位置上
+
+
+sudo iptables -I 放到INPUT上 行号1 -i 
+ 
+ -i lo 允许本地流量 
+ 
+ target 通过
+
+sudo iptables -I INPUT 1 -i lo -j ACCEPT
+
+
+
