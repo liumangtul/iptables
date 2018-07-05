@@ -323,10 +323,15 @@ lo 本地环路设备
 
 #### 允许web服务 ####
 默认是80,443
+
 sudo iptables -A INPUT -p tcp --dport 80 -j ACCEPT
+
 sudo iptables -A input -p tcp --dprot 443 -j ACCEPT
+
 sudo service iptables save
+
 sudo systemctl restart iptables
+
 
 
 
