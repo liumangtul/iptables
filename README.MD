@@ -267,7 +267,9 @@ sudo iptables -L
 
 #### 保存iptables ####
 sudo service iptables save
-sudo systemctl resstart iptables 重启生效
+
+#### 重启生效 ####
+sudo systemctl resstart iptables 
 
 -------
 
@@ -331,6 +333,36 @@ sudo iptables -A input -p tcp --dprot 443 -j ACCEPT
 sudo service iptables save
 
 sudo systemctl restart iptables
+
+
+默认的防火墙是 firewalld
+
+sudo systemctl start firewalld
+
+-------
+### Linux Quick View ###
+useradd 添加用户
+
+passwd 设置密码
+
+userdel 删除用户 
+
+su 切换用户
+
+sudo useradd lisi
+sudo passwd lisi
+su lisi
+cd ~
+userdel lisi -r 
+-r 同时删除用户的组
+
+sudo gpasswd -a lisi whell
+
+把lisi用户放到whell群组内
+
+查看用户所在组
+
+groups lisi
 
 
 
