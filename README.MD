@@ -1,10 +1,9 @@
 # 防火墙 -- IPTABLES
 ## 概述
-定义：iptables 是一种用在linux上的防火墙
+定义：iptables 是用在linux上的防火墙
 
 
 作用：管控要进来的，要出去的，或要转发的数据包
-
 
 用途：
     规则rules
@@ -46,7 +45,7 @@
     website:80
     nginx管理工具
     sudo yum install epel-release
-    sudo yum install ngnix -y
+    sudo yum install nginx -y
 
 
 #### 启动nginx
@@ -226,6 +225,108 @@ sudo iptables -I 放到INPUT上 行号1 -i
  target 通过
 
 sudo iptables -I INPUT 1 -i lo -j ACCEPT
+
+------
+添加一个丢弃所有udp输入的协议规则
+
+sudo iptables -A INPUT -p udp -j DROP
+
+sudo iptables -L --line-numbers
+
+### 删除 ###
+
+删除指定
+
+sudo  iptables -D INPUT 行号
+
+清空规则
+
+                -F INPUT
+
+-----
+
+### 保存 ###
+
+#### 安装管理 ####
+sudo yum install iptables-services -y
+
+#### 开启 ####
+sudo systemctl start iptables 
+
+#### 开机自启 ####
+sudo systemctl enable iptables 
+
+#### 查看 ####
+sudo cat /etc/sysconfig/iptables 
+
+#### 重启iptables ####
+sudo systemctl restart iptables 
+
+#### 显示规则 ####
+sudo iptables -L 
+
+#### 保存iptables ####
+sudo service iptables save
+sudo systemctl resstart iptables 重启生效
+
+-------
+
+. 每个chain都有一个默认的policy
+
+### 修改policy ###
+
+把默认的policy 从 ACCEPT 改成 DROP
+
+也就是只允许设置的通过，其他未知的DROP丢弃。
+
+sudo iptables -L
+
+sudo iptables -F 清洗掉chain
+
+sudo service iptables save 保存
+
+sudo iptables -A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
+
+-m conntrack --ctsate 使用conntrack模块提供的ctstate功能
+
+ESTABLISHED 允许已经创建的连接
+
+RELATED 允许跟现在的连接相关的数据包
+
+-j ACCEPT 允许前面的匹配的动作是 ACCEPT-通过
+
+
+-----
+sudo iptables -A INPUT -p tcp --dport 22 -j ACCEPT
+
+允许端口：22 在tcp协议下传输数据--22 是ssh服务默认使用的端口号
+
+----
+sudo iptables -P INPUT DROP
+
+把INPUT的默认policy 设置成DROP，其他的阻止
+
+设置完保存
+
+sudo service iptables save
+
+
+-----
+#### 允许本地流量loopback ####
+sudo iptables -I INPUT 1 -i lo -j ACCEPT
+
+-i interface 指定网卡
+
+lo 本地环路设备
+
+----
+
+#### 允许web服务 ####
+默认是80,443
+sudo iptables -A INPUT -p tcp --dport 80 -j ACCEPT
+sudo iptables -A input -p tcp --dprot 443 -j ACCEPT
+sudo service iptables save
+sudo systemctl restart iptables
 
 
 
